@@ -28,7 +28,7 @@ class ClientBooksApplicationTests {
 
     @Test
     public void whenGetAllBooks_thenSuccess() {
-        Response response = RestAssured.get(ROOT_URI + "/books");
+        Response response = RestAssured.get(ROOT_URI + "/book-service/books");
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         Assert.assertNotNull(response.getBody());
@@ -36,9 +36,9 @@ class ClientBooksApplicationTests {
 
     @Test
     public void whenAccessProtectedResourceWithoutLogin_thenRedirectToLogin() {
-        Response response = RestAssured.get(ROOT_URI + "/books/1");
+        Response response = RestAssured.get(ROOT_URI + "/book-service/books/1");
 
-        Assert.assertEquals(HttpStatus.FOUND.value(), response.getStatusCode());
+        Assert.assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCode());
         Assert.assertEquals("http://localhost:8084/login",
                 response.getHeader("Location"));
     }
@@ -48,11 +48,12 @@ class ClientBooksApplicationTests {
         RestAssured.defaultParser = Parser.JSON;
 
         Book book = new Book("How to spring cloud", "Baeldung");
+        System.out.println(book);
         Response bookResponse = RestAssured.given().auth()
                 .form("admin", "admin", formConfig).and()
                 .contentType(ContentType.JSON)
                 .body(book)
-                .post(ROOT_URI + "/books");
+                .post(ROOT_URI + "/book-service/books");
         Book result = bookResponse.as(Book.class);
         System.out.println(result);
 

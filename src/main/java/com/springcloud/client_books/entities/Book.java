@@ -3,7 +3,7 @@ package com.springcloud.client_books.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name="books")
+@Table(name="books", schema = "cloud")
 public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -14,7 +14,8 @@ public class Book {
     /*private String timestamp;
     private String message;
     private int status;
-    private String error;*/
+    private String error;
+    private String path;*/
 
     public Book() {}
 
@@ -23,7 +24,9 @@ public class Book {
         this.author=author;
     }
 
-    /*}
+    /*public String getPath() {return this.path;}
+    public void setPath(String path) {this.path=path;}
+    public String getTimestamp() {return this.timestamp;}
     public void setTimestamp(String timestamp) {this.timestamp=timestamp;}
     public String getMessage() {return this.message;}
     public void setMessage(String message) {this.message=message;}
