@@ -76,4 +76,13 @@ class ClientBooksApplicationTests {
         Assert.assertEquals(book.getAuthor(), result.getAuthor());
         Assert.assertEquals(book.getTitle(), result.getTitle());
     }
+
+    @Test
+    public void whenAdminAccessDiscoveryResource_thenSuccess() {
+        Response response = RestAssured.given().auth()
+                .form("admin", "admin", formConfig)
+                .get(ROOT_URI + "/discovery");
+
+        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
 }

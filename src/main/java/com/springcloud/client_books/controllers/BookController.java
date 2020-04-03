@@ -19,13 +19,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<Book> findAllBooks() { //(Principal principal) {
-        String name="unknown";
-        //if (principal!=null) name=principal.getName();
-        //System.out.println("name at BookController: "+name);
-
-        return bookService.findAllBooks();
-    }
+    public List<Book> findAllBooks() { return bookService.findAllBooks();}
 
     @GetMapping("/{bookId}")
     public Book findBook(@PathVariable Long bookId) {
@@ -33,10 +27,7 @@ public class BookController {
     }
 
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        System.out.println("book at BookController: "+book);
-        return bookService.createBook(book);
-    }
+    public Book createBook(@RequestBody Book book) {return bookService.createBook(book);}
 
     @DeleteMapping("/{bookId}")
     public void deleteBook(@PathVariable Long bookId) {
