@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,11 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<Book> findAllBooks() {
+    public List<Book> findAllBooks() { //(Principal principal) {
+        String name="unknown";
+        //if (principal!=null) name=principal.getName();
+        //System.out.println("name at BookController: "+name);
+
         return bookService.findAllBooks();
     }
 
@@ -29,6 +34,7 @@ public class BookController {
 
     @PostMapping
     public Book createBook(@RequestBody Book book) {
+        System.out.println("book at BookController: "+book);
         return bookService.createBook(book);
     }
 
