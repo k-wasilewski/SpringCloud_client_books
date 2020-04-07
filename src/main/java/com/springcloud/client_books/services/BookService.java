@@ -26,9 +26,9 @@ public class BookService {
         else return null;
     }
 
-    public Book createBook(Book book) {bookRepository.save(book);
-        System.out.println("in createBook()");
-        return book;
+    public Book createBook(Book book) {
+        Book newBook = bookRepository.save(book);
+        return newBook;
     }
 
     public void deleteBook(Long bookId) {bookRepository.deleteById(bookId);}

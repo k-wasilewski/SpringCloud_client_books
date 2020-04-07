@@ -43,4 +43,6 @@ public class Book {
     public void setAuthor(String author) {this.author=author;}
 
     public String toString() {return "id="+this.id+"&title="+this.title+"&author="+this.author;}
+
+    public String niceToString() {return "'"+this.title+"', "+this.author;}
 }
