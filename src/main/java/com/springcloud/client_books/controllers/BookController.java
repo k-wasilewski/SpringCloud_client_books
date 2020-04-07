@@ -23,9 +23,24 @@ public class BookController {
     private KafkaProducerConfig kafkaProducerConfig;
     private List<String> messageList= new ArrayList();
 
-    @KafkaListener(topics = {"post", "put", "patch", "delete"}, groupId = "group-id")
-    public void listenToMsgs(String message) {
-        messageList.add(message);
+    @KafkaListener(topics = "post", groupId = "books")
+    public void listenToMsgsPost(String message) {
+        messageList.add("POST, "+message);
+    }
+
+    @KafkaListener(topics = "put", groupId = "books")
+    public void listenToMsgsPut(String message) {
+        messageList.add("PUT, "+message);
+    }
+
+    @KafkaListener(topics = "delete", groupId = "books")
+    public void listenToMsgsDel(String message) {
+        messageList.add("DEL, "+message);
+    }
+
+    @KafkaListener(topics = "patch", groupId = "books")
+    public void listenToMsgsPatch(String message) {
+        messageList.add("PATCH, "+message);
     }
 
     @GetMapping("/messages")

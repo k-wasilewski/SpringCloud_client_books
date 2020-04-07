@@ -25,7 +25,7 @@ public class KafkaConsumerConfig {
                 "localhost:9092");
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
-                "group-id");
+                "books");
         props.put(
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class);
