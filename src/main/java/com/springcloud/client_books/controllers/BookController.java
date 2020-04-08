@@ -2,6 +2,8 @@ package com.springcloud.client_books.controllers;
 
 import com.google.gson.Gson;
 import com.springcloud.client_books.entities.Book;
+import com.springcloud.client_books.entities.BookMessage;
+import com.springcloud.client_books.repositories.BookMessageRepository;
 import com.springcloud.client_books.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,6 +25,8 @@ public class BookController {
     private BookService bookService;
     @Autowired
     private KafkaProducerConfig kafkaProducerConfig;
+    @Autowired
+    private BookMessageRepository bookMessageRepository;
     private Map<LocalDateTime, String> messageList= new HashMap<>();
 
     @KafkaListener(topics = "post-books", groupId = "books")
@@ -59,6 +63,10 @@ public class BookController {
     @PostMapping
     public Book createBook(@RequestBody Book book) {
         Book newBook = bookService.createBook(book);
+        String message = newBook.niceToString()+" created";
+        BookMessage dbMessage = new BookMessage(LocalDateTime.now(), "POST", message);
+        bookMessageRepository.save(dbMessage);
+
         kafkaProducerConfig.sendMessage(newBook.niceToString()+" created", "post-books");
         return newBook;
     }
@@ -66,7 +74,11 @@ public class BookController {
     @DeleteMapping("/{bookId}")
     public void deleteBook(@PathVariable Long bookId) {
         Book book = bookService.findBookById(bookId);
-        kafkaProducerConfig.sendMessage(book.niceToString()+" deleted", "delete-books");
+        String message = book.niceToString()+" deleted";
+        BookMessage dbMessage = new BookMessage(LocalDateTime.now(), "DELETE", message);
+        bookMessageRepository.save(dbMessage);
+
+        kafkaProducerConfig.sendMessage(message, "delete-books");
         bookService.deleteBook(bookId);
     }
 
@@ -74,14 +86,22 @@ public class BookController {
     public Book updateBook(@RequestBody Book book, @PathVariable Long bookId, Principal principal) {
         Book oldBook = bookService.findBookById(bookId);
         Book newBook = bookService.updateBook(book, bookId);
-        kafkaProducerConfig.sendMessage(oldBook.niceToString()+" updated to "+newBook.niceToString(), "put-books");
+        String message = oldBook.niceToString()+" updated to "+newBook.niceToString();
+        BookMessage dbMessage = new BookMessage(LocalDateTime.now(), "PUT", message);
+        bookMessageRepository.save(dbMessage);
+
+        kafkaProducerConfig.sendMessage(message, "put-books");
         return newBook;
     }
 
     @PatchMapping("/{bookId}")
     public Book updateBook(@RequestBody Map<String, String> updates, @PathVariable Long bookId, Principal principal) {
         Book book = bookService.findBookById(bookId);
-        kafkaProducerConfig.sendMessage(book.niceToString()+" updated with "+updates, "patch-books");
+        String message = book.niceToString()+" updated with "+updates;
+        BookMessage dbMessage = new BookMessage(LocalDateTime.now(), "PATCH", message);
+        bookMessageRepository.save(dbMessage);
+
+        kafkaProducerConfig.sendMessage(message, "patch-books");
         updates.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(Book.class, k);
             ReflectionUtils.setField(field, book, v);
