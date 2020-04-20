@@ -1,6 +1,5 @@
 package com.springcloud.client_books.controllers;
 
-import com.google.gson.Gson;
 import com.springcloud.client_books.entities.Book;
 import com.springcloud.client_books.entities.BookMessage;
 import com.springcloud.client_books.repositories.BookMessageRepository;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Field;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
