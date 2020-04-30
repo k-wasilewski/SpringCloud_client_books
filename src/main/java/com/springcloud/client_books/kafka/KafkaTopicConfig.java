@@ -13,7 +13,7 @@ import java.util.Map;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value(value = "localhost:9092")
+    @Value(value = "kafka:9092")
     private String bootstrapAddress;
 
     @Bean
